@@ -1,0 +1,26 @@
+name: BlagchainClient
+version: 0.1.0
+
+authors:
+ -  <a.tejada.galindo@sap.com>
+
+targets:
+  BlagchainClient:
+    main: src/BlagchainClient.cr
+
+crystal: 0.24.2
+
+license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+
+  kemal-session:
+    
+    github: kemalcr/kemal-session
+
+  kemal-flash:
+  
+    github: neovintage/kemal-flash
+    version: 0.1.0

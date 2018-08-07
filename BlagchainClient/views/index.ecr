@@ -1,0 +1,226 @@
+<!--
+###################################################
+#@Author: Blag
+#@Name: index.ecr
+#@Location: d-shop Toronto
+###################################################
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Welcome to the Blagchain!</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="20"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script>
+$(function(){
+  $( ".buy" ).click(function() {
+    document.getElementById("index").value = $(this).closest('tr').index();
+    document.getElementById("hiddenarticle").value = $(this).closest('tr').find('td:nth-child(1)').text();
+    document.getElementById("hiddendescription").value = $(this).closest('tr').find('td:nth-child(2)').text();
+    document.getElementById("hiddento").value = $(this).closest('tr').find('td:nth-child(3)').text();
+    document.getElementById("hiddenprice").value = $(this).closest('tr').find('td:nth-child(4)').text();
+    document.getElementById("modalprice").innerHTML = "Are you sure you want to buy '" + 
+                                                      $(this).closest('tr').find('td:nth-child(1)').text() + 
+                                                      "' for " + $(this).closest('tr').find('td:nth-child(4)').text() + " ?"
+    $('#myModalBuy').modal('show');
+  });
+});
+    </script>  
+<style>
+.article {
+    min-width: 0;
+    width: 200px;
+    display: inline;
+}
+.description {
+    min-width: 0;
+    width: 400px;
+    display: inline;
+}
+.price {
+    min-width: 0;
+    width: 100px;
+    display: inline;
+}
+.index {
+    min-width: 0;
+    width: 100px;
+    display: inline;
+}
+.hiddenprice {
+    min-width: 0;
+    width: 100px;
+    display: inline;
+}
+.hiddenarticle {
+    min-width: 0;
+    width: 200px;
+    display: inline;
+}
+.hiddendescription {
+    min-width: 0;
+    width: 400px;
+    display: inline;
+}
+.hiddenfrom {
+    min-width: 0;
+    width: 800px;
+    display: inline;
+}
+.hiddento {
+    min-width: 0;
+    width: 800px;
+    display: inline;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="jumbotron">
+    <h1><div align="center">Welcome to the Blagchain!</div></h1></br>
+    <h3>
+    <table style="width:100%">
+    <tr>
+    <td align="left">Blagcoin: <%= blagchainUser_amount %></td>
+    <td align="right">User: <%= blagchainUser_user %></td>
+    </tr>
+    <tr>
+    <td></td>
+    </tr>
+    <tr>
+	<td align="left"><button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Transactions</button></td>
+    <td align="right"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Sell something</button></td>
+    </tr>
+    </table>
+    </h3>
+		<div id="demo" class="collapse">
+			<%- blagchainTransactions.each do |x| -%>
+			{index : <%= x.index %> , previous_hash: <%= x.prev_hash %>, hash: <%= x.hash %>, proof: <%= x.proof %>, {transactions: 
+				<%- x.transactions.each do |y| -%>
+					article: <%= y.article %>, description: <%= y.description %>, from: <%= y.from %>, to: <%= y.to %>, amount: <%= y.amount %> 
+				<%- end -%>
+			}}</br>
+			<%- end -%>
+		</div>
+  </div>
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="container">
+		<h2>Sell something</h2>
+		<form action="sellArticle" method="post">
+		<div class="form-group">
+		<input type="hidden" class="form-control price" id="user" name="user" value="<%= blagchainUser_user %>">
+		</div>
+		<div class="form-group">
+		<label for="article">Article:</label>
+		<input type="text" class="form-control article" id="article" placeholder="Article name" name="article">
+		</div>
+		<div class="form-group">
+		<label for="description">Description:</label>
+		<input type="description" class="form-control description" id="description" placeholder="Description" name="description">
+		</div>
+		<div class="form-group">
+		<label for="price">Price:</label>
+		<input type="price" class="form-control price" id="price" placeholder="0.0" name="price">
+		</div>		
+		<button type="submit" class="btn btn-default">Submit</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</form>
+		</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="myModalBuy" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="container">
+		<h2>Buy something</h2>
+		<form action="buyArticle" method="post">
+		<div class="form-group">
+		<input type="hidden" class="form-control index" id="index" name="index" value="">
+		</div>
+		<div class="form-group">
+		<input type="hidden" class="form-control hiddenarticle" id="hiddenarticle" name="hiddenarticle" value="">
+		</div>
+		<div class="form-group">
+		<input type="hidden" class="form-control hiddendescription" id="hiddendescription" name="hiddendescription" value="">
+		</div>
+		<div class="form-group">
+		<input type="hidden" class="form-control hiddenfrom" id="hiddenfrom" name="hiddenfrom" value= <%= blagchainUser_user %> >
+		</div>
+		<div class="form-group">
+		<input type="hidden" class="form-control hiddento" id="hiddento" name="hiddento" value="">
+		</div>		
+		<div class="form-group">
+		<input type="hidden" class="form-control hiddenprice" id="hiddenprice" name="hiddenprice" value="">
+		</div>		
+		<div class="form-group">
+		<label id="modalprice"></label>
+		</div>
+		<button type="submit" class="btn btn-default">Yes</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		</form>
+		</div>
+      </div>
+    </div>
+  </div>
+
+  <%- if notice != nil -%>
+  <div class="modal show" id="myModalAlert" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <h3><%= notice %></h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick = "$('.modal').removeClass('show').addClass('fade');">Close</button>
+        </div>
+      </div>    
+    </div>
+  </div>
+  <%- end -%>
+  
+  <table id="products-table" class="table table-hover">
+    <tbody>
+    <thead>
+      <%- if blagchainProducts.size > 0 -%>
+      <tr>
+        <th>Article</th>
+        <th>Description</th>
+        <th>From User</th>
+        <th>Amount</th>
+        <th>Action</th>
+      </tr>
+      <%- end -%>
+    </thead>    
+      <%- blagchainProducts.each do |x| -%>
+      <tr>
+        <td id="article"><%=x.article%></td>
+        <td><%=x.description%></td>
+        <td><%=x.from%></td>
+        <td><%=x.amount%></td>
+        <td>
+        <%- if x.from != blagchainUser_user -%>
+            <button id="buy" type="button" class="btn buy btn-danger">Buy Article</button>
+        <%- end -%>
+        </td>
+      </tr>
+      <%- end -%>
+    </tbody>
+  </table>  
+  
+</div>
+</body>
+</html>

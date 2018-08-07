@@ -1,0 +1,17 @@
+name: Blagchain
+version: 0.1.0
+
+authors:
+ -  <a.tejada.galindo@sap.com>
+
+targets:
+  Blagchain:
+    main: src/Blagchain.cr
+
+crystal: 0.24.2
+
+license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
